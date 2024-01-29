@@ -1,0 +1,178 @@
+В папке Марат создаем папку My_site
+Открываем VSCode папку My_site
+Sh+cmd+P
+Создаем виртуальную среду
+Выбираем глобальный Python 3.10.11
+
+Открываем терминал Sh+ctr+~
+Устанавливаем джанго 
+pip install django
+	pip install --upgrade pip		пишет уже установлен
+pip list
+
+Создаем проект mysite
+django-admin startproject mysite
+cd mysite
+
+Запускаем тестовый вебсервер
+python manage.py runserver	OK
+
+python manage.py migrate
+создался файл db.sqlite3
+
+Создаем приложение posts и users
+python manage.py startapp posts
+python manage.py startapp users
+
+Делать реальные посты только после определения модели User,
+придется удалять всю бд
+-----------------------
+Создаем файл requirements.txt в котором будут храниться все зависимости в папке django
+pip freeze > requirements.txt
+	Обновление зависимостей
+	pip freeze > requirements.txt
+	Установка зависимостей после скачивания проекта
+	pip install -r requirements.txt
+----------------
+Модели в приложении posts:
+Post - основная модель постов/статей
+Category - категории, связь Один ко многим с основной
+TagPost - теги, связь Многие ко многом с основной
+Metadata - просмотры, лайки, поделиться, связь Один к одному с основной
+------------
+Делаем urls, views, models, forms и остальное
+Создаем  templates, шаблоны, статику
+--------------
+python manage.py createsuperuser
+Тел 	12345
+lemon
+lemon@lemon.ru
+Пароль 	12345
+
+user1
+user1@user.com
+123123qweqq1
+
+usertestemail
+lemon.design@mail.ru
+Джон
+Смит
+123123qweqq89644
+---
+user2
+user2@user.com
+123123qw
+
+usertestemail3
+mhanbekov@mail.ru
+Дюк
+Кит
+123123qweqq56755
+-----------------
+### В шаблонах создаем свои пользовательские теги в папке templatetags
+### css файл взят готовый из курса
+Менеджер записей в бд - class PublishedManager(models.Manager)
+
+pip install django-debug-toolbar
+pip install django-extensions
+python -m pip install Pillow
+---------
+Почему-то пагинация выглядит некрасиво
+Надо очистить кэш или еще как-то
+----------
+в Джанго 5 Не работает путь 
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+только
+    path('logout/', views.logout_user, name='logout'),
+в Джанго 5 LogoutView работает только с пост запросами, надо менять код в base.html
+замена там закомментирована 
+Или делать в Джанго 4
+----------------
+Собственный почтовый сервер
+Usermhan 
+Usermhan@yandex.ru
+Q195375qQ	пароль почты
+optudkfqimxtjdeo	пароль почтового сервера EMAIL_HOST_PASSWORD
+
+Если на маке ошибка: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)
+Решение - найти на маке файл Certificates.command
+	#/Applications/Python 3.10/Install Certificates.command
+Двойным щелчком запустить его 
+Ок
+---------------------
+Гитхаб
+Терминал - в папке My_site
+git init .
+Создаем gitignore
+nano .gitignore
+
+.env 
+.venv whi
+env/ 
+venv/ 
+ENV/ 
+env.bak/ 
+venv.bak/
+
+# Mac
+.DS_Store
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+iqlean/db.sqlite3
+db.sqlite3
+/media
+/data
+
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+/static
+static/*
+
+
+
+cat .gitignore
+git add .
+git commit -m '6 commit'
+
+Гитхаб
+Создаем репозитарий iqlean
+Терминал
+git remote add origin git@github.com:lemon1964/iqlean
+git branch -M main
+git push -u origin main
+
+https://github.com/lemon1964/iqlean
+
+
+git remote add origin git@github.com:lemon1964/iqlean-backend
+git branch -M main
+git push -u origin main
+
+
+
+
+
+
+Ссылки
+Базовый курс С.Балакирева
+https://youtube.com/playlist?list=PLA0M1Bcd0w8yU5h2vwZ4LO7h1xt8COUXl&si=Ub035mNBiXvw3Ey4
+
+Джанго
+https://proproprogs.ru/django4
+
+Фильтры и Шаблонные теги
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/
+--------------
+
+
+
+
+
+
+
