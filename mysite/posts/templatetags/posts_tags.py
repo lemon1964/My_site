@@ -2,6 +2,8 @@ from django import template
 from posts.models import Category, TagPost
 from django.db.models import Count
 from posts.utils import menu
+from django.utils.safestring import mark_safe
+import markdown
 
 
 register = template.Library()
@@ -21,3 +23,7 @@ def show_categories(cat_selected=0):
 def show_all_tags():
     return {'tags': TagPost.objects.annotate(total=Count("tags")).filter(total__gt=0)}
 
+
+@register.filter(name='markdown')
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))

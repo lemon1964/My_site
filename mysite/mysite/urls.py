@@ -20,11 +20,21 @@ from django.conf.urls.static import static
 
 from posts.views import page_not_found
 
+from django.contrib.sitemaps.views import sitemap
+from posts.sitemaps import PostSitemap
+
+sitemaps = {
+    'posts': PostSitemap,
+}
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('captcha/', include('captcha.urls')),
     path("", include("posts.urls")),
     path('users/', include('users.urls', namespace="users")),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap')
 ]
 
 if settings.DEBUG:

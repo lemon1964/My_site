@@ -1,8 +1,10 @@
 from django import forms
-from .models import Category, Metadata, Post, TagPost
+from .models import Category, Comment, Metadata, Post, TagPost
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.utils.deconstruct import deconstructible
+from captcha.fields import CaptchaField
+
 
 
 @deconstructible
@@ -41,3 +43,69 @@ class AddPostForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     file = forms.ImageField(label="Файл")
+    
+    
+class EmailPostForm(forms.Form):
+    name = forms.CharField(max_length=25, label="Ваше имя", required=False)
+    to = forms.EmailField(label="E-mail получателя")
+    comments = forms.CharField(required=False, widget=forms.Textarea, label="Комментарий")
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(EmailPostForm, self).__init__(*args, **kwargs)
+        if self.user and self.user.is_authenticated:
+            self.fields['name'].required = False
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 10}),
+        }
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
+    
+    
+
+class FeedBackForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            # 'class': 'form-control',
+            'id': 'name',
+            'size': '30',
+            # 'placeholder': "Ваше имя"
+        })
+    )
+    email = forms.CharField(
+        max_length=100,
+        widget=forms.EmailInput(attrs={
+            # 'class': 'form-control',
+            'id': 'email',
+            'size': '40',
+            # 'placeholder': "Ваша почта"
+        })
+    )
+    subject = forms.CharField(
+        max_length=200,
+        widget=forms.TextInput(attrs={
+            # 'class': 'form-control',
+            'id': 'subject',
+            'size': '60',
+            # 'placeholder': "Тема"
+        })
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            # 'class': 'form-control md-textarea',
+            'id': 'message',
+            'rows': 10,
+            'cols': 50,
+            # 'placeholder': "Ваше сообщение"
+        })
+    )
+    capatcha = CaptchaField()

@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Post, Category, TagPost, Metadata
+from .models import Comment, Post, Category, TagPost, Metadata
 from django.utils.safestring import mark_safe
 
 # Фильтр по метаданным, если они есть
@@ -74,5 +74,13 @@ class TagPostAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'tag')
     prepopulated_fields = {"slug": ("tag", )}
 
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'post', 'created', 'active']
+    list_filter = ['active', 'created', 'updated']
+    search_fields = ['name', 'email', 'body']
+    
+    
 # admin.site.register(Post)
 

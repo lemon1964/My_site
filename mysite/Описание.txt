@@ -4,21 +4,8 @@ Sh+cmd+P
 Создаем виртуальную среду
 Выбираем глобальный Python 3.10.11
 
-Открываем терминал Sh+ctr+~
-Устанавливаем джанго 
-pip install django
-	pip install --upgrade pip		пишет уже установлен
-pip list
-
 Создаем проект mysite
 django-admin startproject mysite
-cd mysite
-
-Запускаем тестовый вебсервер
-python manage.py runserver	OK
-
-python manage.py migrate
-создался файл db.sqlite3
 
 Создаем приложение posts и users
 python manage.py startapp posts
@@ -33,15 +20,19 @@ pip freeze > requirements.txt
 	pip freeze > requirements.txt
 	Установка зависимостей после скачивания проекта
 	pip install -r requirements.txt
+asgiref==3.7.2
+Django==5.0.1
+django-debug-toolbar==4.2.0
+django-extensions==3.2.3
+pillow==10.2.0
+sqlparse==0.4.4
+typing_extensions==4.9.0
 ----------------
 Модели в приложении posts:
 Post - основная модель постов/статей
 Category - категории, связь Один ко многим с основной
 TagPost - теги, связь Многие ко многом с основной
 Metadata - просмотры, лайки, поделиться, связь Один к одному с основной
-------------
-Делаем urls, views, models, forms и остальное
-Создаем  templates, шаблоны, статику
 --------------
 python manage.py createsuperuser
 Тел 	12345
@@ -69,25 +60,6 @@ mhanbekov@mail.ru
 Кит
 123123qweqq56755
 -----------------
-### В шаблонах создаем свои пользовательские теги в папке templatetags
-### css файл взят готовый из курса
-Менеджер записей в бд - class PublishedManager(models.Manager)
-
-pip install django-debug-toolbar
-pip install django-extensions
-python -m pip install Pillow
----------
-Почему-то пагинация выглядит некрасиво
-Надо очистить кэш или еще как-то
-----------
-в Джанго 5 Не работает путь 
-    path('logout/', views.LogoutView.as_view(), name='logout'),
-только
-    path('logout/', views.logout_user, name='logout'),
-в Джанго 5 LogoutView работает только с пост запросами, надо менять код в base.html
-замена там закомментирована 
-Или делать в Джанго 4
-----------------
 Собственный почтовый сервер
 Usermhan 
 Usermhan@yandex.ru
@@ -98,81 +70,107 @@ optudkfqimxtjdeo	пароль почтового сервера EMAIL_HOST_PASSW
 Решение - найти на маке файл Certificates.command
 	#/Applications/Python 3.10/Install Certificates.command
 Двойным щелчком запустить его 
-Ок
----------------------
-Гитхаб
-Терминал - в папке My_site
-git init .
-Создаем gitignore
-nano .gitignore
-
-.env 
-.venv whi
-env/ 
-venv/ 
-ENV/ 
-env.bak/ 
-venv.bak/
-
-# Mac
-.DS_Store
-
-# Django #
-*.log
-*.pot
-*.pyc
-__pycache__
-iqlean/db.sqlite3
-db.sqlite3
-/media
-/data
-
-
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
-/static
-static/*
-
-
-
-cat .gitignore
-git add .
-git commit -m '6 commit'
-
-Гитхаб
-Создаем репозитарий iqlean
-Терминал
-git remote add origin git@github.com:lemon1964/iqlean
-git branch -M main
-git push -u origin main
-
-https://github.com/lemon1964/iqlean
-
-
-git remote add origin git@github.com:lemon1964/iqlean-backend
-git branch -M main
-git push -u origin main
-
-
-
-
-
-
-Ссылки
-Базовый курс С.Балакирева
-https://youtube.com/playlist?list=PLA0M1Bcd0w8yU5h2vwZ4LO7h1xt8COUXl&si=Ub035mNBiXvw3Ey4
-
-Джанго
-https://proproprogs.ru/django4
-
-Фильтры и Шаблонные теги
-https://docs.djangoproject.com/en/4.2/ref/templates/builtins/
 --------------
+---------------
+Копируем папку My_site в папку Мелье
+Открывем, запускаем сервер, Ок.
+
+В папке My_site рвем связь с репозиторием гита
+rm -rf .git
+Проверяем связь с репозиторием
+git remote -v 			- not a git repository
+
+В файлах about.html и index.html поправляем вывод пагинатора
+
+--------------
+Реализуем Поделиться ссылкой на статью
+
+Копируем из Мелье share.html
+Создаем class EmailPostForm(forms.Form)
+Копируем из Мелье def post_share(request, post_id),
+    path('<int:post_id>/share/', views.post_share, name='post_share')
+Меняем язык на русский
+Проверяем отправку через Usermhan@yandex.ru 	Ок
+-------------------
+Реализуем Комментарии к статье
+Копируем из Мелье пути, представления, формы, шаблоны
+ИИ, делаем как нужно
+Проверяем добавку комментариев	 	Ок
+--------------------
+Мелье markdown==3.4.1
+@register.filter(name='markdown')
+Проверяем работу ссылок markdown в постах		Ок
+---------------
+Мелье добавление карты сайта sitemap
+settings.py			sitemaps.py		
+path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+     name='django.contrib.sitemaps.views.sitemap')
+http://127.0.0.1:8000/sitemap.xml
+В  http://127.0.0.1:8000/admin/sites/site/ вставить нужное доменное имя
+в продакшене домен своего веб-сайта.			Ок
+------------------------
+Новостная лента RSS, Мелье
+feeds.py
+path('feed/', LatestPostsFeed(), name='post_feed')
+Установка Fluent Reader из app Store 
+Подписка в utils.py		Ок
+------------------------
+Установка удаление PostgreSQL
+https://www.youtube.com/watch?v=snLQ6GsxnLk&t=105s
+
+Пользователь	user account
+postgres
+Пароль
+12345
+Порт
+5432		ОК
+--------------------
+В терминале PostgreSQL
+CREATE USER posts WITH PASSWORD '12345';
+CREATE DATABASE site OWNER posts ENCODING 'UTF8';
+Пользователь posts
+база данных site
+
+pip install psycopg2-binary==2.9.3
+pip freeze > requirements.txt (из папки проекта)
+
+В терминале проекта
+Выгрузка в json
+python3 manage.py dumpdata --indent=2 --output=mysite_data.json --exclude auth.permission --exclude contenttypes
+Смотрим
+python3 -Xutf8 manage.py dumpdata --indent=2 --output=mysite_data.json
+
+Меняем в проекте бд на PostgreSQL
+settings -- DATABASES
+python3 manage.py migrate
+
+Загрузка данных в новую базу данных
+python3 manage.py loaddata mysite_data.json		Ок
+
+			удаление бд
+			DROP DATABASE site;
+
+			Для поиска кирилицы в бд
+			postgres=# CREATE DATABASE dbname ENCODING 'UTF-8' LC_COLLATE 'ru_RU.UTF-8' LC_CTYPE 'ru_RU.UTF-8' TEMPLATE=template0
+-----------------------
+Реализуем Обратную связь
+Копируем из курса SPA Django представления, формы, шаблоны
+Капча из Балакирев Джанго 3
+Делаем как нужно
+Проверяем 	 	Ок
+------------------------
 
 
 
 
 
+
+-------------
+git remote -v	имя удаленного репозитория, связанного с текущим
+
+cd /Users/lemon/Desktop/Проекты/Марат/My_site
+git add .
+git commit -m 'БД_исходная'
+git push -u origin main
 
 

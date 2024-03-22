@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load posts_tags %}
+
+{% block content %}
+<ul class="list-articles">
+			<li><div class="article-panel">
+	<p class="first">{{ post.author.username|default:"неизвестен" }}</p>
+	<p class="last">{{post.time_update}}</p>
+    </div>
+{% if post.photo %}
+		<p><img class="img-article-left thumb" src="{{post.photo.url}}"></p>
+{% endif %}
+
+				<h2>{{post.title}}</h2>
+    {% autoescape off %}
+	{{post.content|markdown|truncatewords_html:20}}
+    {% endautoescape %}
+			</li>
+</ul>
+
+<p><a href="{{ post.get_absolute_url }}">Вернуться к посту</a></p>
+
+{% with comments.count as total_comments %}
+{% if total_comments %}
+    <h3>
+      Комментариев - {{ total_comments }}
+    </h3>
+
+  {% for comment in comments %}
+    <div class="article-panel">
+      <p class="first">{{ comment.name }} </p>
+      <p class="last">{{ comment.created }}</p>
+    </div>
+    {{ comment.body|linebreaks }}
+  {% empty %}
+  {% endfor %}
+  {% else %}
+    <p>Комментариев нет</p>
+  {% endif %}
+  {% endwith %}
+
+
+  <h1>Добавление комментария</h1>
+    <p><strong>Статья:</strong> {{ post.title }}</p>
+        <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+        </form>
+
+  <p><a href="{{ post.get_absolute_url }}">Вернуться к посту</a></p>
+
+{% endblock %}

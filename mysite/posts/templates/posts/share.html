@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Поделиться статьей{% endblock %}
+
+{% block content %}
+{% if request.GET.sent == 'True' %}
+    <h1>Успешно отправлено</h1>
+    <p>
+        Статья "{{ post.title }}" отправлена на почту {{ request.GET.to }}.
+    </p>
+    <p><a href="{{ post.get_absolute_url }}">Вернуться к посту</a></p>
+{% else %}
+    <h1>Поделиться статьей "{{ post.title }}" по почте</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if request.user.is_authenticated %}
+          <p>Ваше имя: {{ request.user.username }}</p>
+        {% else %}
+          <div>
+              {{ form.name.label_tag }}
+              {{ form.name }}
+          </div>
+        {% endif %}
+        <br>
+        <div>
+            {{ form.to.label_tag }}
+            {{ form.to }}
+        </div>
+        <br>
+        <div>
+            {{ form.comments.label_tag }}
+            {{ form.comments }}
+        </div>
+        <br>
+        <input type="submit" value="Отправить">
+    </form>
+{% endif %}
+{% endblock %}

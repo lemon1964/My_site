@@ -8,10 +8,11 @@
 
 <nav>
     <ul>
+        страницы
         {% for p in page_obj.paginator.page_range %}
-        <li>
+        <!-- <li> -->
             <a href="?page={{ p }}">{{ p }}</a>
-        </li>
+        <!-- </li> -->
         {% endfor %}
     </ul>
 </nav>

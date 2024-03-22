@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load posts_tags %}
 
 {% block breadcrumbs %}
 {% if perms.posts.change_post %}
@@ -24,5 +25,31 @@
 <p><img class="img-article-left" src="{{post.photo.url}}"></p>
 {% endif %}
 
-{{post.content|linebreaks}}
+<p>
+  <a href="{% url 'post_share' post.id %}">
+    Поделиться статьей
+  </a>
+</p>
+<p>
+<a href="{% url 'post_comments' post.id %}">
+  Добавить комментарий
+  </a>
+</p>
+
+{{post.content|markdown}}
+
+<div class="article-panel">
+<p class="first">
+  <a href="{% url 'post_share' post.id %}">
+    Поделиться статьей
+  </a>
+</p>
+<p class="last">
+<a href="{% url 'post_comments' post.id %}">
+  Комментарии
+  </a>
+</p>
+</div>
+
 {% endblock %}
+

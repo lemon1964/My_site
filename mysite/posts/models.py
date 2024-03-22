@@ -110,3 +110,27 @@ class Metadata(models.Model):
 
 class UploadFiles(models.Model):
     file = models.FileField(upload_to='uploads_images', verbose_name="Изображение")
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post,
+                             on_delete=models.CASCADE,
+                             related_name='comments',
+                             verbose_name='Статья')
+    name = models.CharField(max_length=80, verbose_name='Имя')
+    email = models.EmailField()
+    body = models.TextField(verbose_name='Комментарий')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    updated = models.DateTimeField(auto_now=True, verbose_name='Время изменения')
+    active = models.BooleanField(default=True, verbose_name='Статус')
+
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['created']),
+        ]
+
+    def __str__(self):
+        return f'Комментарий, {self.name}, на {self.post}'

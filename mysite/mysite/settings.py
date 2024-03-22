@@ -30,6 +30,8 @@ INTERNAL_IPS = ['127.0.0.1',]
 
 # Application definition
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -41,6 +43,10 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'users',
     'debug_toolbar',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    'django.contrib.postgres',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -83,11 +89,19 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        'NAME': 'site',
+        'USER': 'posts',
+        'PASSWORD': '12345',
     }
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -142,8 +156,11 @@ AUTHENTICATION_BACKENDS = [
     'users.authentication.EmailAuthBackend',
 ]
 
+
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
+# Для Yandex
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "Usermhan@yandex.ru"
@@ -151,9 +168,18 @@ EMAIL_HOST_PASSWORD = "optudkfqimxtjdeo"
 EMAIL_USE_SSL = True
 # EMAIL_USE_TLS = True
 
+# Для Gmail
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'sv444444@gmail.com'
+# EMAIL_HOST_PASSWORD = 'zuvugwayfacqidwh'
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
+
+
 
 AUTH_USER_MODEL = 'users.User'
 

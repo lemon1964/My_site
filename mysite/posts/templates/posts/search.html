@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load posts_tags %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+  {% if total_results %}
+    <h3>Найдено статей {{ total_results }}, содержащих "{{ query }}"</h3>
+    {% for post in results %}
+      <h4>
+        <a href="{{ post.get_absolute_url }}">
+          {{ post.title }}
+        </a>
+      </h4>
+      {{ post.content|markdown|truncatewords_html:30 }}
+    {% empty %}
+      <p>Нет статей, содержащих "{{ query }}".</p>
+    {% endfor %}
+
+    {% if page_obj.has_other_pages %}
+      <nav class="pagination">
+        <ul>
+          {% if page_obj.has_previous %}
+            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">&lt;</a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              {{ num }}
+            {% else %}
+              <a href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">&gt;</a>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  {% else %}
+    <p>Нет результатов для запроса "{{ query }}"</p>
+  {% endif %}
+
+
+{% endblock %}
