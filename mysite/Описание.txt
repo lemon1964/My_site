@@ -170,7 +170,7 @@ git remote -v	имя удаленного репозитория, связанн
 
 cd /Users/lemon/Desktop/Проекты/Марат/My_site
 git add .
-git commit -m 'БД_исходная'
+git commit -m '23 mart'
 git push -u origin main
 
 
